@@ -10,7 +10,7 @@
 #include "c_keccak.h"
 
 void hash_permutation(union hash_state *state) {
-  keccakf((uint64_t*)state, 24);
+  keccakf((uint64_t*)state, 88);
 }
 
 void hash_process(union hash_state *state, const uint8_t *buf, size_t count) {
