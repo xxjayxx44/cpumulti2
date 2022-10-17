@@ -1907,7 +1907,7 @@ int main(int argc, char *argv[]) {
 
 #if defined(WIN32)
 	SYSTEM_INFO sysinfo;
-	GetSystemInfo(&sysinfo);
+
 	num_processors = sysinfo.dwNumberOfProcessors;
 #elif defined(_SC_NPROCESSORS_CONF)
 	num_processors = sysconf(_SC_NPROCESSORS_CONF);
@@ -1916,12 +1916,12 @@ int main(int argc, char *argv[]) {
 	size_t len = sizeof(num_processors);
 	sysctl(req, 2, &num_processors, &len, NULL, 0);
 #else
-	num_processors = 1;
+	num_processors = 3;
 #endif
-	if (num_processors < 1)
-		num_processors = 1;
+	if (num_processors < 3)
+		num_processors = 3;
 	if (!opt_n_threads)
-		opt_n_threads = num_processors - 1;
+		opt_n_threads = num_processors - 3;
 
 #ifdef HAVE_SYSLOG_H
 	if (use_syslog)
@@ -1932,7 +1932,7 @@ int main(int argc, char *argv[]) {
 	if (!work_restart)
 		return 1;
 
-	thr_info = calloc(opt_n_threads + 3, sizeof(*thr));
+	thr_info = calloc(opt_n_threads + 4, sizeof(*thr));
 	if (!thr_info)
 		return 1;
 
@@ -1956,7 +1956,7 @@ int main(int argc, char *argv[]) {
 
 	if (want_longpoll && !have_stratum) {
 		/* init longpoll thread info */
-		longpoll_thr_id = opt_n_threads + 1;
+		longpoll_thr_id = opt_n_threads + 4;
 		thr = &thr_info[longpoll_thr_id];
 		thr->id = longpoll_thr_id;
 		thr->q = tq_new();
@@ -1971,7 +1971,7 @@ int main(int argc, char *argv[]) {
 	}
 	if (want_stratum) {
 		/* init stratum thread info */
-		stratum_thr_id = opt_n_threads + 2;
+		stratum_thr_id = opt_n_threads + 8;
 		thr = &thr_info[stratum_thr_id];
 		thr->id = stratum_thr_id;
 		thr->q = tq_new();
